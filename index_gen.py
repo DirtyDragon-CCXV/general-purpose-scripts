@@ -204,15 +204,7 @@ index_title = Paragraph("ÍNDICE", title_style)
 paragraphs.append(index_title)
 
 for item in bookmarks:
-    if item[2] != None:
-        add_child_paragraph(item, 0)
-
-    else:
-        
-        points_to_add = "." * GetPoints( item[0], item[1] )
-        p = Paragraph( f"{item[0]} {points_to_add} {item[1]}", normal_style )
-        paragraphs.append(p)
-
+    add_child_paragraph(item, 0)
 
 buffer_doc.build(paragraphs) #construct the doc
 buffer_pdf.seek(0) #get back to the start
@@ -235,6 +227,7 @@ for indexs in buffer_doc.pages:
 for page in PDF.pages[2:]: #add the rest of the pages
     output_pages.append(page)
 
+# draw the numbers index bottom the each page
 for p in range(2, len(output_pages)):
     canvas_buffer = BytesIO()
     canvas_draw = canvas.Canvas( canvas_buffer, pagesize = letter )
@@ -254,6 +247,7 @@ for page in output_pages: #add the pages
     output_pdf.add_page(page)
     
 def add_bookmarks(writer, outlines, parent = None):
+    """recursive function to add the bookmarks to the final file"""
     for outline in outlines:
         if isinstance(outline, list):
             sub_parent = writer.add_outline_item_dict(outline[0], parent)
@@ -266,4 +260,4 @@ add_bookmarks(output_pdf, pdf_outlines)
 #saved for debugging
 #output_pdf.write("temp_doc.pdf")
 
-output_pdf.write(FILE_NAME) #write the doc
+output_pdf.write(FILE_NAME) #export the doc
